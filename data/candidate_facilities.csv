@@ -1,0 +1,6 @@
+Facility_ID,Name,City,Latitude,Longitude,Capacity_Units_Annual,Annual_Fixed_Cost,Notes
+FC01,San Francisco Bay Area,Fremont,37.5485,-121.9886,25000,1050000,"Central to 17 Bay Area stores, high labor costs"
+FC02,Los Angeles Metro,Ontario,34.0633,-117.6509,25000,980000,Serves 18 LA stores + Orange County
+FC03,San Diego,San Diego,32.8312,-117.1225,20000,920000,Serves 5 San Diego stores
+FC04,Central Valley,Fresno,36.7783,-119.4179,20000,820000,"Lower costs, central location"
+FC05,"Reno, NV (Out-of-State)",Reno,39.5296,-119.8138,25000,720000,Comparison: 31% lower cost than Bay Area
