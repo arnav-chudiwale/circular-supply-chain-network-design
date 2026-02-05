@@ -1,0 +1,6 @@
+Facility_ID,Name,City,Y,X,Capacity,Annual_Fixed_Cost,FacilityType
+FC01,San Francisco Bay Area,Fremont,37.5485,-121.9886,25000,1050000,Candidate
+FC02,Los Angeles Metro,Ontario,34.0633,-117.6509,25000,980000,Candidate
+FC03,San Diego,San Diego,32.8312,-117.1225,20000,920000,Candidate
+FC04,Central Valley,Fresno,36.7783,-119.4179,20000,820000,Candidate
+FC05,"Reno, NV (Out-of-State)",Reno,39.5296,-119.8138,25000,720000,Candidate

@@ -1,0 +1,55 @@
+StoreID,Store_Name,City,Y,X,Weight,GroupName
+ST001,Apple Stanford Shopping Center,Palo Alto,37.443259,-122.170731,907,All
+ST002,Apple University Avenue,Palo Alto,37.448135,-122.159279,410,All
+ST003,Apple Valley Fair,Santa Clara,37.385669,-121.944344,510,All
+ST004,Apple Oakridge,San Jose,37.251789,-121.857689,362,All
+ST005,Apple Santana Row,San Jose,37.321598,-121.947586,754,All
+ST006,Apple Burlingame,Burlingame,37.584139,-122.346085,500,All
+ST007,Apple Hillsdale,San Mateo,37.538845,-122.29969,347,All
+ST008,Apple Bay Street,Emeryville,37.836293,-122.293571,462,All
+ST009,Apple Stoneridge Mall,Pleasanton,37.695469,-121.929092,428,All
+ST010,Apple Broadway Plaza,Walnut Creek,37.895718,-122.058942,486,All
+ST011,Apple Corte Madera,Corte Madera,37.925789,-122.510345,455,All
+ST012,Apple Los Gatos,Los Gatos,37.226567,-121.982234,456,All
+ST013,Apple Union Square,San Francisco,37.788365,-122.407089,838,All
+ST014,Apple Chestnut Street,San Francisco,37.801234,-122.434678,338,All
+ST015,Apple Stonestown,San Francisco,37.728456,-122.47589,480,All
+ST016,Apple Bridgepointe,San Mateo,37.561789,-122.25989,497,All
+ST017,Apple Sunvalley,Concord,37.93789,-122.036789,472,All
+ST018,Apple The Grove,Los Angeles,34.072015,-118.35926,770,All
+ST019,Apple Century City,Los Angeles,34.059567,-118.418234,923,All
+ST020,Apple Beverly Center,Los Angeles,34.075484,-118.377814,694,All
+ST021,Apple Tower Theatre,Los Angeles,34.050134,-118.255678,819,All
+ST022,Apple Pasadena,Pasadena,34.145678,-118.144567,743,All
+ST023,Apple Third Street Promenade,Santa Monica,34.015234,-118.495678,841,All
+ST024,Apple Glendale Galleria,Glendale,34.146254,-118.256775,331,All
+ST025,Apple The Americana at Brand,Glendale,34.142567,-118.25489,330,All
+ST026,Apple Manhattan Village,Manhattan Beach,33.890234,-118.394567,494,All
+ST027,Apple Topanga,Canoga Park,34.189234,-118.602345,401,All
+ST028,Apple Northridge,Northridge,34.239567,-118.538901,511,All
+ST029,Apple Victoria Gardens,Rancho Cucamonga,34.111789,-117.54321,420,All
+ST030,Apple Del Amo,Torrance,33.831567,-118.352789,359,All
+ST031,Apple Brea Mall,Brea,33.914963,-117.886949,427,All
+ST032,Apple South Bay Galleria,Redondo Beach,33.888456,-118.35789,427,All
+ST033,Apple Westfield Culver City,Culver City,34.009234,-118.394567,494,All
+ST034,Apple Sherman Oaks,Sherman Oaks,34.151234,-118.44789,342,All
+ST035,Apple Santa Anita,Arcadia,34.124567,-118.058901,392,All
+ST036,Apple Irvine Spectrum,Irvine,33.650234,-117.739567,642,All
+ST037,Apple Fashion Island,Newport Beach,33.616228,-117.874525,759,All
+ST038,Apple Mission Viejo,Mission Viejo,33.55789,-117.661234,528,All
+ST039,Apple Main Place,Santa Ana,33.716789,-117.889012,401,All
+ST040,Apple South Coast Plaza,Costa Mesa,33.690345,-117.888678,885,All
+ST041,Apple Huntington Beach,Huntington Beach,33.711234,-117.993456,380,All
+ST042,Apple Fashion Valley,San Diego,32.767971,-117.166936,740,All
+ST043,Apple UTC,San Diego,32.870378,-117.212512,685,All
+ST044,Apple Carlsbad,Carlsbad,33.081234,-117.236789,494,All
+ST045,Apple Plaza Bonita,National City,32.655678,-117.073901,356,All
+ST046,Apple North County,Escondido,33.124567,-117.062345,463,All
+ST047,Apple Arden Fair,Sacramento,38.601234,-121.426789,413,All
+ST048,Apple Roseville,Roseville,38.765432,-121.271234,464,All
+ST049,Apple Fresno,Fresno,36.782345,-119.804567,433,All
+ST050,Apple Bakersfield,Bakersfield,35.353456,-119.002789,420,All
+ST051,Apple Monterey,Monterey,36.58545,-121.894126,470,All
+ST052,Apple Modesto,Modesto,37.639234,-120.995678,384,All
+ST053,Apple Palm Desert,Palm Desert,33.761234,-116.378901,434,All
+ST054,Apple Riverside,Riverside,33.97789,-117.372345,369,All
