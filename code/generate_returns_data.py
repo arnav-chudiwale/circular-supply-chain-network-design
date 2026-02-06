@@ -8,8 +8,8 @@ stores_df = pd.read_csv('data/store_locations.csv')
 
 print("Adding returns volume data")
 
-#Flagship stores : 8000-12,000 returns per year
-#Standard stores: 4000-7000 returns per year 
+#Flagship stores : 8000-12,000 units per year
+#Standard stores: 4000-7000 units per year 
 
 #Determine store type based on Location
 flagship_stores = [

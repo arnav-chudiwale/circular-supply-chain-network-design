@@ -1,0 +1,2 @@
+num_facilities,total_supply,total_weighted_distance_miles,avg_weighted_distance_miles,solution_method
+1,28140,735334.46,26.13,ArcGIS Network Analyst - Minimize Impedance

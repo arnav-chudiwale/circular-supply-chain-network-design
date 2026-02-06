@@ -171,7 +171,7 @@ Subject to:
 ---
 
 ## Project Structure
-(Current as of - 5th Feb 2026)
+(Current as of - 6th Feb 2026)
 ```
 CircularSupplyChain/
 ├── code/
@@ -180,7 +180,10 @@ CircularSupplyChain/
 │   ├── generate_cost_parameters.py               # Generates cost parameter data
 │   ├── generate_grading_data.py                  # Generates product grading distributions
 │   ├── generate_returns_data.py                  # Generates return volume data
-│   └── generate_store_locations.py               # Generates store location data
+│   ├── generate_store_locations.py               # Generates store location data
+│   ├── arcgis_facilities.py                      # Prepares facility data for ArcGIS
+│   ├── prepare_arcgis_supply.py                  # Prepares supply points for ArcGIS
+│   └── analyze_arcgis_results.py                 # ✓ Analyzes ArcGIS optimization results
 │
 ├── data/
 │   ├── store_locations.csv                       # 54 store locations (real coordinates)
@@ -188,13 +191,21 @@ CircularSupplyChain/
 │   ├── stores_with_returns.csv                   # Return volume by store
 │   ├── candidate_facilities.csv                  # 5 candidate refurb center locations
 │   ├── cost_parameters.csv                       # Financial assumptions
-│   └── current_state_baseline.csv                # Baseline performance metrics
+│   ├── current_state_baseline.csv                # Baseline performance metrics
+│   ├── arcgis_facilities.csv                     # ArcGIS-formatted facility data
+│   └── arcgis_supply_points.csv                  # ArcGIS-formatted supply points
+│
+├── ArcGIS Results/
+│   ├── Network_Optimization.aprx                 # ArcGIS project file
+│   └── Index/                                    # ArcGIS network index files
 │
 ├── models/
 │   └── [Placeholder for optimization models]
 │
 ├── outputs/
-│   └── [Generated analysis results]
+│   ├── arc_gis_solution_facilities.csv           # ✓ Selected facility locations
+│   ├── arc_gis_solution_stores.csv               # ✓ Store-to-facility assignments
+│   └── arcgis_solution_summary.csv               # ✓ Summary metrics (6th Feb 2026)
 │
 ├── visualizations/
 │   └── [Dashboards and visualizations]
@@ -204,19 +215,55 @@ CircularSupplyChain/
 │
 ├── test/
 │   ├── test_gurobi.py                            # Gurobi optimization tests
-│   └── test_imports.py                           # Import validation tests
+│   ├── test_imports.py                           # Import validation tests
+│   ├── arcgis_issue_diagnose.py                  # ArcGIS diagnostics
+│   └── check_facility_locations.py               # Facility validation tests
 │
 └── README.md
 ```
 
 ---
 
-## Expected Results
+## Results & Progress
+
+### ✅ Completed: ArcGIS Network Analyst Optimization (6th Feb 2026)
+
+**Network Design Outputs (FINALIZED):**
+1. **Optimal facility:** 1 refurbishment center selected
+   - **Location:** Los Angeles Metro (Ontario, CA)
+   - **Coordinates:** 34.0633°N, 117.6509°W
+   - **Capacity:** 25,000 units/year
+   
+2. **Store assignments:** All 54 stores optimally routed to Los Angeles Metro facility
+   - **Total stores assigned:** 54
+   - **Total annual returns routed:** 28,140 units
+   
+3. **Transport metrics:**
+   - **Average distance per store:** 24.5 miles
+   - **Total weighted distance:** 735,334 mile-units/year
+   - **Average weighted distance:** 26.1 miles per unit
+
+### Optimization Results Summary
+| Metric | Value |
+|--------|-------|
+| Chosen Facility | Los Angeles Metro |
+| Stores Assigned | 54 |
+| Total Supply Routed | 28,140 units/year |
+| Avg. Distance | 24.5 miles |
+| Total Weighted Distance | 735,334 mile-miles/year |
+| Avg Weighted Distance | 26.1 miles |
+
+**Files Generated (6th Feb 2026):**
+- `arc_gis_solution_facilities.csv` - Selected facility details
+- `arc_gis_solution_stores.csv` - Store assignments and routings
+- `arcgis_solution_summary.csv` - Summary metrics
+
+### Expected Results (Phase 2)
 
 ### Network Design Outputs
-1. **Optimal facility count:** 2-3 refurbishment centers (determined by optimization)
-2. **Facility locations:** Subset selected from 5 candidates based on cost-service tradeoff
-3. **Store assignments:** Each of 54 stores assigned to nearest optimal facility
+1. **Optimal facility count:** ✅ DETERMINED = 1 facility (Los Angeles Metro)
+2. **Facility locations:** ✅ SELECTED from 5 candidates → Ontario, CA
+3. **Store assignments:** ✅ COMPLETED - All 54 stores assigned
 4. **Transport network:** Routing map showing store-to-facility connections
 
 ### Financial Performance Metrics
@@ -323,4 +370,7 @@ This project is developed for educational and portfolio purposes. Data is synthe
 
 ---
 
-*Last Updated: February 2026*
+*Last Updated: 6th February 2026*
+
+### Recent Updates
+- **6th Feb 2026:** ArcGIS Network Analyst optimization completed. Los Angeles Metro facility selected to serve all 54 California stores with 28,140 annual returns. Analysis script debugged and validated.
