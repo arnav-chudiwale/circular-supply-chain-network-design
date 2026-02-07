@@ -1,0 +1,2 @@
+model,objective,num_facilities,facilities_opened,total_fixed_cost,total_transport_cost,total_annual_cost,total_weighted_distance,avg_weighted_distance,solve_time_seconds,optimal
+Cost Minimization,Minimize total cost,2,"FC02, FC05",1700000.0,286880.1752,1986880.1752,3586002.19,127.43433511016346,0.007433,True

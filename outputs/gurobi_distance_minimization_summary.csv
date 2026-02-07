@@ -1,0 +1,2 @@
+model,objective,num_facilities,facilities_opened,total_weighted_distance,average_weighted_distance,solve_time_seconds,optimal
+Distance Minimization,Minimize total weighted distance,2,"FC01,FC02",1528331.4700000002,54.31170824449183,0.016637,True

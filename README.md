@@ -175,49 +175,63 @@ Subject to:
 ```
 CircularSupplyChain/
 ├── code/
-│   ├── calculate_baseline.py                     # Calculates current state baseline metrics
-│   ├── generate_candidate_facilities.py          # Generates candidate facility locations
-│   ├── generate_cost_parameters.py               # Generates cost parameter data
-│   ├── generate_grading_data.py                  # Generates product grading distributions
-│   ├── generate_returns_data.py                  # Generates return volume data
-│   ├── generate_store_locations.py               # Generates store location data
-│   ├── arcgis_facilities.py                      # Prepares facility data for ArcGIS
-│   ├── prepare_arcgis_supply.py                  # Prepares supply points for ArcGIS
-│   └── analyze_arcgis_results.py                 # ✓ Analyzes ArcGIS optimization results
+│   ├── Data Generation & Preparation:
+│   │   ├── calculate_baseline.py                 # Calculates baseline metrics
+│   │   ├── generate_candidate_facilities.py      # Generates facility locations
+│   │   ├── generate_cost_parameters.py           # Generates cost data
+│   │   ├── generate_grading_data.py              # Generates grading distributions
+│   │   ├── generate_returns_data.py              # Generates return volumes
+│   │   ├── generate_store_locations.py           # Generates store locations
+│   │   ├── arcgis_facilities.py                  # Prepares facility data for ArcGIS
+│   │   └── prepare_arcgis_supply.py              # Prepares supply points for ArcGIS
+│   │
+│   ├── Data Processing & Analysis:
+│   │   ├── load_data_for_gurobi.py               # ✓ Loads data, creates distance matrix
+│   │   └── analyze_arcgis_results.py             # Analyzes ArcGIS results
+│   │
+│   └── Optimization Models (Gurobi):
+│       ├── gurobi_model_distance.py              # ✓ MODEL #1: Distance Minimization
+│       └── gurobi_model_cost.py                  # ✓ MODEL #2: Cost Minimization
 │
 ├── data/
-│   ├── store_locations.csv                       # 54 store locations (real coordinates)
-│   ├── stores_complete.csv                       # Stores with returns & grading data
-│   ├── stores_with_returns.csv                   # Return volume by store
-│   ├── candidate_facilities.csv                  # 5 candidate refurb center locations
+│   ├── store_locations.csv                       # 54 store locations
+│   ├── stores_complete.csv                       # Stores with returns data
+│   ├── stores_with_returns.csv                   # Return volumes
+│   ├── candidate_facilities.csv                  # 5 candidate facilities
 │   ├── cost_parameters.csv                       # Financial assumptions
-│   ├── current_state_baseline.csv                # Baseline performance metrics
-│   ├── arcgis_facilities.csv                     # ArcGIS-formatted facility data
-│   └── arcgis_supply_points.csv                  # ArcGIS-formatted supply points
+│   ├── current_state_baseline.csv                # Baseline metrics
+│   ├── gurobi_data_package.pkl                   # ✓ Preprocessed data package
+│   └── distance_matrix.csv                       # ✓ Store-facility distances
 │
 ├── ArcGIS Results/
-│   ├── Network_Optimization.aprx                 # ArcGIS project file
-│   └── Index/                                    # ArcGIS network index files
+│   ├── Network_Optimization.aprx                 # ArcGIS project
+│   └── Index/                                    # Network indices
 │
-├── models/
-│   └── [Placeholder for optimization models]
+├── models/ └── [Optimization models]
 │
 ├── outputs/
-│   ├── arc_gis_solution_facilities.csv           # ✓ Selected facility locations
-│   ├── arc_gis_solution_stores.csv               # ✓ Store-to-facility assignments
-│   └── arcgis_solution_summary.csv               # ✓ Summary metrics (6th Feb 2026)
+│   ├── ArcGIS Results:
+│   │   ├── arc_gis_solution_facilities.csv       # Facility selections
+│   │   ├── arc_gis_solution_stores.csv           # Store assignments
+│   │   └── arcgis_solution_summary.csv           # Summary metrics
+│   │
+│   ├── Gurobi Model #1 (Distance):
+│   │   ├── gurobi_distance_minimization_assignments.csv
+│   │   ├── gurobi_distance_minimization_facility.csv
+│   │   └── gurobi_distance_minimization_summary.csv
+│   │
+│   └── Gurobi Model #2 (Cost):
+│       ├── gurobi_cost_assignments.csv           # ✓ Store assignments
+│       ├── gurobi_cost_facility_stats.csv        # ✓ Facility stats
+│       └── gurobi_cost_summary.csv               # ✓ Summary metrics
 │
-├── visualizations/
-│   └── [Dashboards and visualizations]
-│
-├── documentation/
-│   └── [Project documentation]
-│
+├── visualizations/ └── [Dashboards]
+├── documentation/ └── [Documentation]
 ├── test/
-│   ├── test_gurobi.py                            # Gurobi optimization tests
-│   ├── test_imports.py                           # Import validation tests
-│   ├── arcgis_issue_diagnose.py                  # ArcGIS diagnostics
-│   └── check_facility_locations.py               # Facility validation tests
+│   ├── test_gurobi.py
+│   ├── test_imports.py
+│   ├── arcgis_issue_diagnose.py
+│   └── check_facility_locations.py
 │
 └── README.md
 ```
@@ -225,6 +239,22 @@ CircularSupplyChain/
 ---
 
 ## Results & Progress
+
+### ✅ Data Preprocessing Completed (6th Feb 2026)
+
+**Data Pipeline:**
+- ✅ Loaded 54 stores with 28,140 units/year supply
+- ✅ 5 candidate facilities with fixed costs: $720K-$1.05M/year
+- ✅ Calculated 270 store-to-facility distance pairs using Haversine formula
+- ✅ Applied 1.3x routing factor for actual road distances
+- ✅ Created pickle data package for Gurobi optimization
+
+**Distance Matrix Statistics:**
+- Average distance: 291.26 miles
+- Minimum: 6.60 miles | Maximum: 648.57 miles
+- Total capacity: 115,000 units/year (4.09x demand)
+
+---
 
 ### ✅ Completed: ArcGIS Network Analyst Optimization (6th Feb 2026)
 
@@ -257,6 +287,54 @@ CircularSupplyChain/
 - `arc_gis_solution_facilities.csv` - Selected facility details
 - `arc_gis_solution_stores.csv` - Store assignments and routings
 - `arcgis_solution_summary.csv` - Summary metrics
+
+---
+
+### ✅ Completed: Gurobi Model #1 - Distance Minimization (6th Feb 2026)
+
+**Problem:** Minimize total weighted transportation distance  
+**Constraint:** Open exactly 2 facilities  
+**Result:** Optimal solution found in 0.02 seconds (0% gap)
+
+**Selected Facilities:**
+1. **FC01 - San Francisco Bay Area**: 22 stores, 10,866 units (43% utilization), avg 43.85 miles
+2. **FC02 - Los Angeles Metro**: 32 stores, 17,274 units (69% utilization), avg 60.90 miles
+
+**Network Performance:** Total weighted distance = 1,528,331 mile-units, Avg = **54.31 miles/unit**
+
+---
+
+### ✅ Completed: Gurobi Model #2 - Cost Minimization (6th Feb 2026)
+
+**Problem:** Minimize total annual cost (fixed + transport)  
+**Constraint:** Open exactly 2 facilities  
+**Result:** Optimal solution found in 0.01 seconds (0% gap)
+
+**Selected Facilities:**
+1. **FC02 - Los Angeles Metro**: $1,064,152.61/year total ($980K fixed + $84.2K transport)
+2. **FC05 - Reno, NV**: $922,727.57/year total ($720K fixed + $202.7K transport)
+
+**Network Performance:** 
+| Metric | Value |
+|--------|-------|
+| **Total Annual Cost** | **$1,986,880.18** |
+| Total Fixed Cost | $1,700,000.00 |
+| Total Transport Cost | $286,880.18 |
+| Avg Distance/unit | 127.43 miles |
+
+**Savings vs Distance Model:** $165,386/year (7.7% reduction) by selecting lower-cost Reno facility
+
+---
+
+### Comparative Summary
+
+| Model | Facilities | Avg Distance | Total Cost | Optimization |
+|-------|-----------|----------|-----------|---|
+| **ArcGIS** | LA Metro (1) | 26.1 mi | ~$1.04M | Distance only, 1-facility constraint |
+| **Gurobi-Distance** | Bay Area + LA (2) | 54.3 mi | ~$2.15M | Pure distance minimization |
+| **Gurobi-Cost** | LA + Reno (2) | 127.4 mi | **$1.99M** | **Best total cost** ✓ |
+
+**Recommendation:** Use Gurobi-Cost model (LA Metro + Reno) for optimal financial performance ($1.99M annual cost with acceptable service trade-off).
 
 ### Expected Results (Phase 2)
 
@@ -373,4 +451,11 @@ This project is developed for educational and portfolio purposes. Data is synthe
 *Last Updated: 6th February 2026*
 
 ### Recent Updates
-- **6th Feb 2026:** ArcGIS Network Analyst optimization completed. Los Angeles Metro facility selected to serve all 54 California stores with 28,140 annual returns. Analysis script debugged and validated.
+- **6th Feb 2026 (Evening):** ✅ Gurobi optimization models completed
+  - MODEL #1: Distance minimization → 2-facility solution (Bay Area + LA) with 54.3 mi/unit average distance
+  - MODEL #2: Cost minimization → 2-facility solution (LA + Reno) with $1.99M annual cost ($165K savings vs distance model)
+  - Comparative analysis: ArcGIS vs Gurobi-Distance vs Gurobi-Cost trade-offs documented
+  - Data preprocessing validated: Haversine distance calculations correct, routing factor applied
+  - All output files generated and saved to `outputs/` directory
+
+- **6th Feb 2026 (Afternoon):** ArcGIS Network Analyst optimization completed. Los Angeles Metro facility selected to serve all 54 California stores with 28,140 annual returns. Analysis script debugged and validated.
