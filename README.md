@@ -224,7 +224,25 @@ CircularSupplyChain/
 │   ├── cost_parameters.csv                       # Financial assumptions
 │   ├── current_state_baseline.csv                # Baseline metrics
 │   ├── gurobi_data_package.pkl                   # ✓ Preprocessed data package
-│   └── distance_matrix.csv                       # ✓ Store-facility distances
+│   ├── distance_matrix.csv                       # ✓ Store-facility distances
+│   └── powerbi/                                  # ✓ PowerBI data folder (8th Feb)
+│       ├── stores.csv
+│       ├── facilities.csv
+│       ├── parameters.csv
+│       ├── baseline.csv
+│       ├── optimal_solution.csv
+│       ├── p_comparison.csv
+│       ├── assignments.csv
+│       ├── facility_stats.csv
+│       ├── financial_summary.csv
+│       ├── cash_flows.csv
+│       ├── scenarios.csv
+│       ├── comparison.csv
+│       ├── kpi_summary.csv
+│       ├── facility_map_data.csv
+│       ├── store_assignments.csv
+│       ├── financial_cash_flows_formatted.csv
+│       └── DATA_DICTIONARY.txt
 │
 ├── ArcGIS Results/
 │   ├── Network_Optimization.aprx                 # ArcGIS project
@@ -374,25 +392,31 @@ NPV:    $7,952,278     | ROI: 447.6% | Payback: 0.56 years
 
 ---
 
-### ✅ Completed: Gurobi Model #2 - Cost Minimization (6th Feb 2026)
+### ✅ Completed: Gurobi Model #2 - Cost Minimization (6th Feb 2026 | **CORRECTED 8th Feb 2026**)
 
-**Problem:** Minimize total annual cost (fixed + transport)  
+**Problem:** Minimize total annual cost (fixed + pickup/dropoff + handling + transport)  
 **Constraint:** Open exactly 2 facilities  
-**Result:** Optimal solution found in 0.01 seconds (0% gap)
+**Result:** Optimal solution found in 0.04 seconds (0% gap)
+
+**⚠️ CORRECTION APPLIED (8th Feb 2026):**
+- **Previous result (INCORRECT):** Selected FC02 + FC05 for $1,986,880 (missing handling cost in objective)
+- **Corrected result:** Selected FC04 + FC05 for $1,551,349.71 ✓
 
 **Selected Facilities:**
-1. **FC02 - Los Angeles Metro**: $1,064,152.61/year total ($980K fixed + $84.2K transport)
-2. **FC05 - Reno, NV**: $922,727.57/year total ($720K fixed + $202.7K transport)
+1. **FC04 - Central Valley (Fresno)**: 37 stores, 19,749 units, avg 271.49 miles, $820,924.77/year
+2. **FC05 - Reno Regional (Reno, NV)**: 17 stores, 8,391 units, avg 225.21 miles, $720,325.94/year
 
 **Network Performance:** 
 | Metric | Value |
 |--------|-------|
-| **Total Annual Cost** | **$1,986,880.18** |
-| Total Fixed Cost | $1,700,000.00 |
-| Total Transport Cost | $286,880.18 |
-| Avg Distance/unit | 127.43 miles |
+| **Total Annual Cost** | **$1,551,349.71** ✓ |
+| Total Fixed Cost | $1,540,000.00 |
+| Total Pickup/Drop-off Cost | $250.00 |
+| Total Handling Cost | $9,849.00 |
+| Total Transport Cost | $1,250.71 |
+| Avg Distance/unit | 257.69 miles |
 
-**Savings vs Distance Model:** $165,386/year (7.7% reduction) by selecting lower-cost Reno facility
+**Consistency Check:** Now matches optimal_p (p=2) results exactly - both models select FC04 + FC05 with $1,551,349.71 annual cost ✓
 
 ---
 
@@ -402,9 +426,11 @@ NPV:    $7,952,278     | ROI: 447.6% | Payback: 0.56 years
 |-------|-----------|----------|-----------|---|
 | **ArcGIS** | LA Metro (1) | 26.1 mi | ~$1.04M | Distance only, 1-facility constraint |
 | **Gurobi-Distance** | Bay Area + LA (2) | 54.3 mi | ~$2.15M | Pure distance minimization |
-| **Gurobi-Cost** | LA + Reno (2) | 127.4 mi | **$1.99M** | **Best total cost** ✓ |
+| **Gurobi-Cost** | Fresno + Reno (2) | 257.7 mi | **$1.55M** | **✓ CORRECTED (8th Feb)** |
 
-**Recommendation:** Use Gurobi-Cost model (LA Metro + Reno) for optimal financial performance ($1.99M annual cost with acceptable service trade-off).
+**CRITICAL UPDATE (8th Feb 2026):** Previous results showed Gurobi-Cost selecting LA + Reno for $1.99M. This was due to **missing handling cost** in the objective function. After adding handling costs, the model correctly selects **Fresno + Reno for $1.55M** (matching optimal_p). 
+
+**Recommendation:** Use Gurobi-Cost model (Fresno + Reno) for optimal financial performance ($1.55M annual cost, $7.95M 3-year NPV, 7-month payback).
 
 ### Expected Results (Phase 2)
 
@@ -518,9 +544,27 @@ This project is developed for educational and portfolio purposes. Data is synthe
 
 ---
 
-*Last Updated: 7th February 2026*
+*Last Updated: 8th February 2026*
 
 ### Recent Updates
+
+- **8th Feb 2026 (Morning):** ✅ **BUG FIX: Cost Minimization Model Consistency & PowerBI Preparation**
+  - **CRITICAL ISSUE RESOLVED:** gurobi_model_cost.py was missing `handling_cost` component in objective function
+    - **Before fix:** Selected FC02 + FC05 = $1,986,880 (suboptimal)
+    - **After fix:** Selected FC04 + FC05 = $1,551,350 ✓ (matches optimal_p model)
+    - Cost breakdown now includes: Fixed Cost ($1.54M) + Pickup/Drop-off ($250) + **Handling ($9,849)** + Transport ($1,251)
+    - **ROOT CAUSE:** Cost model was minimizing only (Fixed + Transport), ignoring handling costs. Optimal_p model correctly included all 4 cost components.
+    - **VERIFICATION:** Both models now consistently select **FC04 (Fresno) + FC05 (Reno)** with identical total cost
+  
+  - **PowerBI Data Preparation Complete:** Fixed 4 errors in `prepare_powerbi_data.py`
+    1. **Filename typo:** `financial__scenarios.csv` → `financial_scenarios.csv` (double underscore)
+    2. **Array length mismatch:** KPI data had extra placeholder value (12 items vs 11 needed)
+    3. **Merge data type issue:** Added `index_col=0` to properly parse facility_stats index as Facility_ID
+    4. **Unicode encoding error:** Added `encoding='utf-8'` to file write operation (arrow character → in data dictionary)
+    - All 12/12 files successfully copied to PowerBI folder
+    - Generated supplementary tables: facility_map_data.csv, store_assignments.csv, financial_cash_flows_formatted.csv, DATA_DICTIONARY.txt
+    - PowerBI ready for dashboard visualization
+
 - **7th Feb 2026 (Final):** ✅ **OPTIMAL SOLUTION DETERMINED** (p=2 Facility Location)
   - Gurobi optimal p formulation: tested p=1 through p=5 to find best facility count
   - **Selected: FC04 (Fresno) + FC05 (Reno)** = $1.55M annual cost, $7.95M 3-year NPV, **0.56-year payback**
@@ -531,7 +575,7 @@ This project is developed for educational and portfolio purposes. Data is synthe
 
 - **6th Feb 2026 (Evening):** ✅ Gurobi comparative analysis completed
   - Distance minimization model (p=2): Bay Area + LA, 54.3 mi/unit average
-  - Cost minimization model (p=2): LA + Reno, $1.99M annual cost ($165K vs. distance model)
+  - Cost minimization model (p=2): LA + Reno, $1.99M annual cost ($165K vs. distance model) [NOTE: later found to have missing handling cost]
   - Identified that cost model outperforms distance model when realistic transport costs applied
 
 - **6th Feb 2026 (Afternoon):** ArcGIS baseline completed. Los Angeles Metro single-facility scenario for comparison

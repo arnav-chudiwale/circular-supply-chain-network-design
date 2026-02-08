@@ -1,0 +1,12 @@
+KPI_Name,Value,Display_Value,Category
+Optimal Facilities,2,2 Facilities,Network
+Current Recovery,619080,"$619,080",Financial
+Proposed Recovery,3968946.292188416,"$3,968,946",Financial
+Incremental Value,3349866.292188416,"$3,349,866",Financial
+Improvement %,541.1039433010945,541.1%,Financial
+Total Capex,2250000,"$2,250,000",Financial
+NPV (3 Year),7952277.7725184355,"$7,952,278",Financial
+Payback Period Years,0.5571777055894899,0.6 Years,Financial
+ROI (%),447.5779956468544,447.6%,Financial
+Avg Distance (miles),257.6873063255153,257.7 Miles,Network
+Facilities Opened,"FC04 (Central Valley, Fresno), FC05 (Reno, NV (Out-of-State), Reno)","FC04 (Central Valley, Fresno), FC05 (Reno, NV (Out-of-State), Reno)",Network

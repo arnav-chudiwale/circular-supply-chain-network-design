@@ -1,0 +1,7 @@
+Scenario,Approach,Num_Facilities,Facilities_Opened,Annual_Recovery,Annual_Fixed_Cost,Annual_Transport_Cost,Annual_Processing_Cost,Total_Annual_Cost,Net_Annual_Benefit,Avg_Distance_Miles,Total_CapEx,NPV_3Year,Payback_Years,ROI_Percent,Notes
+Current State (Bulk Recycling),As-Is,0,,619080.0,0.0,0.0,0.0,0.0,619080.0,0,0.0,0.0,0.0,0.0,Baseline - bulk sale to recycler
+ArcGIS Network Analyst,Minimize Distance,1,See ArcGIS results,,,,,,,"0    26.13
+Name: avg_weighted_distance_miles, dtype: float64",,,,,Geographic optimization only
+Gurobi: Distance Minimization,Minimize Weighted Distance,2,"FC01,FC02",,,,,,,54.31170824449183,,,,,Validates ArcGIS approach
+Gurobi: Cost Minimization (p=2),Minimize Total Cost,2,"FC04, FC05",,1540000.0,1250.7078115840002,,1551349.707811584,,257.6873063255153,,,,,Economic optimization
+RECOMMENDED: Optimal Facility Count,Minimize Total Cost (optimal p),2,"FC04 (Central Valley, Fresno), FC05 (Reno, NV (Out-of-State), Reno)",3968946.292188416,1540000.0,1250.7078115840002,,1551349.707811584,3968946.292188416,257.6873063255153,2250000.0,7952277.7725184355,0.5571777055894899,447.5779956468544,Full economic + financial analysis

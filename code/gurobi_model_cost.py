@@ -5,7 +5,7 @@ import pandas as pd
 from datetime import datetime
 
 print('GUROBI MODEL #2: TOTAL COST MINIMIZATION')
-print('Objective: Minimize fixed costs + transportation costs')
+print('Objective: Minimize fixed costs + pickup/drop-off + handling + transportation costs')
 
 #Load data
 
@@ -20,6 +20,7 @@ fixed_cost = data['fixed_cost']
 capacity = data['capacity']
 transport_cost_per_mile = data['transport_cost_per_mile']
 pickup_dropoff_fee = data['pickup_dropoff_fee']
+handling_cost_per_unit = data['handling_cost_per_unit']
 
 print(f" Loaded data:")
 print(f" Stores: {len(stores)}")
@@ -56,8 +57,8 @@ for i in stores:
 print(f" Created {len(facilities)} binary facility variables")
 print(f" Created {len(stores)*len(facilities)} binary assignment variables")
 
-#Objective function: Minimize total cost = fixed cost + pickup/drop-off + transport cost
-print("\n Setting Objective Function: Minimize total cost (fixed + pickup-drop-off + transport)")
+#Objective function: Minimize total cost = fixed cost + pickup/drop-off + handling + transport cost
+print("\n Setting Objective Function: Minimize total cost (fixed + pickup-drop-off + handling + transport)")
 
 #Fixed Cost 
 fixed_cost_expr = gp.quicksum(
@@ -69,6 +70,11 @@ pickup_dropoff_expr = gp.quicksum(
     y[j] * pickup_dropoff_fee for j in facilities
 )
 
+#Handling Cost
+handling_cost_expr = gp.quicksum(
+    supply[i] * x[i,j] * handling_cost_per_unit for i in stores for j in facilities
+)
+
 #Transport Cost
 transport_cost_expr = gp.quicksum(
     x[i,j] * supply[i] * distance[i,j] * transport_cost_per_mile
@@ -77,7 +83,7 @@ transport_cost_expr = gp.quicksum(
 )
 
 #Total Cost 
-total_cost_expr = fixed_cost_expr + pickup_dropoff_expr + transport_cost_expr
+total_cost_expr = fixed_cost_expr + pickup_dropoff_expr + handling_cost_expr + transport_cost_expr
 
 model.setObjective(total_cost_expr, GRB.MINIMIZE)
 print(" Objective: Minimize total cost set")
@@ -131,11 +137,15 @@ if model.Status == GRB.OPTIMAL:
 
     #Calulate cost components
     total_fixed = sum(y[j].X * fixed_cost[j] for j in facilities)
+    total_pickup_dropoff = sum(y[j].X * pickup_dropoff_fee for j in facilities)
+    total_handling = sum(x[i,j].X * supply[i] * handling_cost_per_unit for i in stores for j in facilities)
     total_transport = sum(x[i,j].X * supply[i] * distance[i,j] * transport_cost_per_mile for i in stores for j in facilities)
-    total_cost = total_fixed + total_transport 
+    total_cost = total_fixed + total_pickup_dropoff + total_handling + total_transport
 
     print("Cost Breakdown:")
     print(f" Total Fixed Cost: ${total_fixed:,.2f}")
+    print(f" Total Pickup/Drop-off Cost: ${total_pickup_dropoff:,.2f}")
+    print(f" Total Handling Cost: ${total_handling:,.2f}")
     print(f" Total Transport Cost: ${total_transport:,.2f}")
     print(f" Total Annual Cost: ${total_cost:,.2f}")
     print(f" (Model Objective Value: ${model.ObjVal:,.2f})")
@@ -270,6 +280,8 @@ if model.Status == GRB.OPTIMAL:
         'num_facilities': len(chosen_facilities),
         'facilities_opened': ', '.join(chosen_facilities),
         'total_fixed_cost': total_fixed,
+        'total_pickup_dropoff_cost': total_pickup_dropoff,
+        'total_handling_cost': total_handling,
         'total_transport_cost': total_transport,
         'total_annual_cost': total_cost,
         'total_weighted_distance': total_weighted_distance,

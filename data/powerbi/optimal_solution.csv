@@ -1,0 +1,2 @@
+optimal_p,facilities_opened_ids,facilities_opened,total_annual_cost,total_fixed_cost,total_pickup_dropoff_fee,total_handling_cost,total_transport_cost,avg_distance_miles,avg_utilization_pct,model
+2,"FC04,FC05","FC04 (Central Valley, Fresno), FC05 (Reno, NV (Out-of-State), Reno)",1551349.707811584,1540000.0,250.0,9848.999999999996,1250.7078115840002,257.6873063255153,62.53333333333333,Optimal p Determination
