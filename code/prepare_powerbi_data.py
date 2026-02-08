@@ -125,9 +125,10 @@ map_data = facilities.merge(
 )
 
 # Add status
-optimal_facilities = optimal['facilities_opened'].iloc[0].split(', ')
+optimal_facilities = optimal['facilities_opened_ids'].iloc[0].split(',')
+optimal_facilities = [fid.strip() for fid in optimal_facilities]  # Remove whitespace
 map_data["Status"] = map_data["Facility_ID"].apply(
-    lambda x: "Chosen" if x in optimal_facilities else "Not Selected"
+    lambda x: "Selected" if x in optimal_facilities else "Not Selected"
 )
 
 #Select relevant columns for map 

@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import re
 
 print("="*70)
 print("CREATING MASTER COMPARISON REPORT")
@@ -21,6 +22,9 @@ optimal_model = pd.read_csv('outputs/gurobi_optimal_p_summary.csv')
 # Financial
 financial = pd.read_csv('outputs/financial_summary.csv')
 
+# Load facility reference data
+facilities_ref = pd.read_csv('data/candidate_facilities.csv')
+
 # ArcGIS (if available)
 try:
     arcgis_summary = pd.read_csv('outputs/arcgis_solution_summary.csv')
@@ -29,6 +33,73 @@ except:
     has_arcgis = False
 
 print("\n✓ Loaded all result files")
+
+# =============================================================================
+# HELPER FUNCTION TO STANDARDIZE FACILITY NAMES
+# =============================================================================
+
+def format_facilities_standardized(facility_input, facilities_df):
+    """
+    Standardize facility names to format: facility_id (City, State(abr))
+    Handles various input formats: facility IDs, names, or mixed formats
+    """
+    if facility_input is None or facility_input == 'None' or facility_input == '':
+        return None
+    
+    # Create mapping dictionaries
+    id_to_info = {}
+    name_to_id = {}
+    
+    for _, row in facilities_df.iterrows():
+        fid = row['Facility_ID']
+        city = row['City']
+        name = row['Name']
+        
+        # Determine state based on city
+        state_map = {
+            'Fremont': 'CA',
+            'Ontario': 'CA',
+            'San Diego': 'CA',
+            'Fresno': 'CA',
+            'Reno': 'NV'
+        }
+        state = state_map.get(city, 'CA')
+        
+        id_to_info[fid] = f"{fid} ({city}, {state})"
+        name_to_id[name] = fid
+    
+    facility_input = str(facility_input).strip()
+    
+    # If it's a single facility name (like "Los Angeles Metro")
+    if facility_input in name_to_id:
+        fid = name_to_id[facility_input]
+        return id_to_info[fid]
+    
+    # If it's already in a complex format, parse and reformat
+    if '(' in facility_input:
+        # Extract facility IDs from format like "FC04 (Central Valley, Fresno), FC05 (...)"
+        fids = re.findall(r'(FC\d+)', facility_input)
+        return ', '.join([id_to_info.get(fid, fid) for fid in fids])
+    
+    # If it's a list of IDs separated by comma
+    if ',' in facility_input:
+        fids = [f.strip() for f in facility_input.split(',')]
+        # Check if these are IDs or names
+        formatted = []
+        for f in fids:
+            if f in id_to_info:
+                formatted.append(id_to_info[f])
+            elif f in name_to_id:
+                formatted.append(id_to_info[name_to_id[f]])
+            else:
+                formatted.append(f)
+        return ', '.join(formatted)
+    
+    # If it's a single facility ID
+    if facility_input in id_to_info:
+        return id_to_info[facility_input]
+    
+    return facility_input
 
 # =============================================================================
 # BUILD COMPARISON TABLE
@@ -41,7 +112,7 @@ comparison_data.append({
     'Scenario': 'Current State (Bulk Recycling)',
     'Approach': 'As-Is',
     'Num_Facilities': 0,
-    'Facilities_Opened': 'None',
+    'Facilities_Opened': format_facilities_standardized(None, facilities_ref),
     'Annual_Recovery': baseline['annual_recovery'].iloc[0],
     'Annual_Fixed_Cost': 0,
     'Annual_Transport_Cost': 0,
@@ -58,18 +129,22 @@ comparison_data.append({
 
 # ArcGIS Solution (if available)
 if has_arcgis:
+    # Extract the selected facility from ArcGIS results (facility with demand > 0)
+    arcgis_facilities = pd.read_csv('outputs/arc_gis_solution_facilities.csv')
+    selected_facility = arcgis_facilities[arcgis_facilities['DemandCount'] > 0]['Name'].iloc[0] if len(arcgis_facilities[arcgis_facilities['DemandCount'] > 0]) > 0 else 'Unknown'
+    
     comparison_data.append({
         'Scenario': 'ArcGIS Network Analyst',
         'Approach': 'Minimize Distance',
         'Num_Facilities': arcgis_summary['num_facilities'].iloc[0],
-        'Facilities_Opened': 'See ArcGIS results',
+        'Facilities_Opened': format_facilities_standardized(selected_facility, facilities_ref),
         'Annual_Recovery': np.nan,
         'Annual_Fixed_Cost': np.nan,
         'Annual_Transport_Cost': np.nan,
         'Annual_Processing_Cost': np.nan,
         'Total_Annual_Cost': np.nan,
         'Net_Annual_Benefit': np.nan,
-        'Avg_Distance_Miles': arcgis_summary.get('avg_weighted_distance_miles', np.nan),
+        'Avg_Distance_Miles': arcgis_summary['avg_weighted_distance_miles'].iloc[0],
         'Total_CapEx': np.nan,
         'NPV_3Year': np.nan,
         'Payback_Years': np.nan,
@@ -82,7 +157,7 @@ comparison_data.append({
     'Scenario': 'Gurobi: Distance Minimization',
     'Approach': 'Minimize Weighted Distance',
     'Num_Facilities': distance_model['num_facilities'].iloc[0],
-    'Facilities_Opened': distance_model['facilities_opened'].iloc[0],
+    'Facilities_Opened': format_facilities_standardized(distance_model['facilities_opened'].iloc[0], facilities_ref),
     'Annual_Recovery': np.nan,
     'Annual_Fixed_Cost': np.nan,
     'Annual_Transport_Cost': np.nan,
@@ -102,7 +177,7 @@ comparison_data.append({
     'Scenario': 'Gurobi: Cost Minimization (p=2)',
     'Approach': 'Minimize Total Cost',
     'Num_Facilities': cost_model['num_facilities'].iloc[0],
-    'Facilities_Opened': cost_model['facilities_opened'].iloc[0],
+    'Facilities_Opened': format_facilities_standardized(cost_model['facilities_opened'].iloc[0], facilities_ref),
     'Annual_Recovery': np.nan,
     'Annual_Fixed_Cost': cost_model['total_fixed_cost'].iloc[0],
     'Annual_Transport_Cost': cost_model['total_transport_cost'].iloc[0],
@@ -122,7 +197,7 @@ comparison_data.append({
     'Scenario': 'RECOMMENDED: Optimal Facility Count',
     'Approach': 'Minimize Total Cost (optimal p)',
     'Num_Facilities': optimal_model['optimal_p'].iloc[0],
-    'Facilities_Opened': optimal_model['facilities_opened'].iloc[0],
+    'Facilities_Opened': format_facilities_standardized(optimal_model['facilities_opened'].iloc[0], facilities_ref),
     'Annual_Recovery': financial['Proposed_Annual_Recovery'].iloc[0],
     'Annual_Fixed_Cost': optimal_model['total_fixed_cost'].iloc[0],
     'Annual_Transport_Cost': optimal_model['total_transport_cost'].iloc[0],

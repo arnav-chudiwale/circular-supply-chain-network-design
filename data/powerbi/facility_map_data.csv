@@ -2,5 +2,5 @@ Facility_ID,Name,City,Latitude,Longitude,Status,Capacity_Units_Annual,Annual_Fix
 FC01,San Francisco Bay Area,Fremont,37.5485,-121.9886,Not Selected,25000,1050000,0,0,0.0,0.0
 FC02,Los Angeles Metro,Ontario,34.0633,-117.6509,Not Selected,25000,980000,0,0,0.0,0.0
 FC03,San Diego,San Diego,32.8312,-117.1225,Not Selected,20000,920000,0,0,0.0,0.0
-FC04,Central Valley,Fresno,36.7783,-119.4179,Not Selected,20000,820000,37,19749,98.745,271.48829966074226
-FC05,"Reno, NV (Out-of-State)",Reno,39.5296,-119.8138,Not Selected,25000,720000,17,8391,33.564,225.2053831486116
+FC04,Central Valley,Fresno,36.7783,-119.4179,Selected,20000,820000,37,19749,98.745,271.48829966074226
+FC05,"Reno, NV (Out-of-State)",Reno,39.5296,-119.8138,Selected,25000,720000,17,8391,33.564,225.2053831486116
