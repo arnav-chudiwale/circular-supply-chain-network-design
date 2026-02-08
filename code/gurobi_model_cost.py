@@ -19,12 +19,14 @@ distance = data['distance']
 fixed_cost = data['fixed_cost']
 capacity = data['capacity']
 transport_cost_per_mile = data['transport_cost_per_mile']
+pickup_dropoff_fee = data['pickup_dropoff_fee']
 
 print(f" Loaded data:")
 print(f" Stores: {len(stores)}")
 print(f" Facilities: {len(facilities)}")
 print(f" Total Supply of devices to be refurbished: {sum(supply.values()):,} units/year")
-print(f" Transport cost per mile: ${transport_cost_per_mile:.2f}")
+print(f" Transport cost per mile: ${transport_cost_per_mile:.4f}")
+print(f" Pickup/Drop-off fee per facility: ${pickup_dropoff_fee:.0f}")
 
 #Show cost range 
 print(f" \n Fixed Cost Range:")
@@ -54,12 +56,17 @@ for i in stores:
 print(f" Created {len(facilities)} binary facility variables")
 print(f" Created {len(stores)*len(facilities)} binary assignment variables")
 
-#Objective function: Minimize total cost = fixed cost + transport cost
-print("\n Setting Objective Function: Minimize total cost (fixed + transport)")
+#Objective function: Minimize total cost = fixed cost + pickup/drop-off + transport cost
+print("\n Setting Objective Function: Minimize total cost (fixed + pickup-drop-off + transport)")
 
 #Fixed Cost 
 fixed_cost_expr = gp.quicksum(
     y[j] * fixed_cost[j] for j in facilities
+)
+
+#Pickup/Drop-off Fee
+pickup_dropoff_expr = gp.quicksum(
+    y[j] * pickup_dropoff_fee for j in facilities
 )
 
 #Transport Cost
@@ -70,7 +77,7 @@ transport_cost_expr = gp.quicksum(
 )
 
 #Total Cost 
-total_cost_expr = fixed_cost_expr + transport_cost_expr
+total_cost_expr = fixed_cost_expr + pickup_dropoff_expr + transport_cost_expr
 
 model.setObjective(total_cost_expr, GRB.MINIMIZE)
 print(" Objective: Minimize total cost set")

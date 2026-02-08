@@ -27,8 +27,13 @@ cost_parameters = {
     #Facility capacity (units/year)
     'facility_capacity_units': 25000, #Industry standard for smartphones
 
-    #Transport (per mile per unit)
-    'transport_cost_per_mile_per_unit': 0.08, # LTL freight CA rates 2024
+    #REALISTIC TRANSPORT COST MODEL
+    #Based on LTL/FTL freight rates + reverse logistics
+    'unit_weight_lbs': 0.44, #Average smartphone weight (200g)
+    'freight_rate_per_cwt_per_100mi': 3.50, #LTL CA rate per hundredweight per 100 miles (2024)
+    'pickup_dropoff_fee_per_stop': 125, #Fixed fee per facility stop - realistic industry rate
+    'unload_handling_per_unit': 0.35, #Unloading and handling at facility ($0.35/unit)
+    'fuel_surcharge_pct': 0.12, #12% fuel surcharge (typical)
 
     #Time value decay
     'value_decay_per_week': 4

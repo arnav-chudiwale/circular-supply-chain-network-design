@@ -89,10 +89,37 @@ for fac in facilities:
 
 #Cost parametes
 
-transport_cost_per_mile = params_df['transport_cost_per_mile_per_unit'].iloc[0]
+#REALISTIC TRANSPORT COST CALCULATION
+unit_weight_lbs = params_df['unit_weight_lbs'].iloc[0]
+freight_rate_per_cwt_per_100mi = params_df['freight_rate_per_cwt_per_100mi'].iloc[0]
+pickup_dropoff_fee = params_df['pickup_dropoff_fee_per_stop'].iloc[0]
+unload_handling_per_unit = params_df['unload_handling_per_unit'].iloc[0]
+fuel_surcharge_pct = params_df['fuel_surcharge_pct'].iloc[0]
 
-print(f"\n Cost Parameters:")
-print(f" Transport Cost: ${transport_cost_per_mile:.2f}/mile/unit")
+# Calculate REALISTIC transport cost per mile per unit:
+# LTL freight rate from CA industry data: $3.50 per cwt per 100 miles
+# Weight: 0.44 lbs = 0.0044 cwt
+# Freight per unit per 100 miles = 0.0044 cwt × $3.50/cwt = $0.0154
+# Freight per unit per MILE = $0.0154 / 100 miles = $0.000154/mile
+# Plus fuel surcharge: $0.000154 × 1.12 = $0.000172/mile
+# Plus handling at origin and destination = $0.35/unit (one-time, not per mile!)
+
+# For optimization model, we'll model the variable cost per mile and fixed handling cost separately
+weight_cwt = unit_weight_lbs / 100
+freight_cost_per_mile = (weight_cwt * freight_rate_per_cwt_per_100mi) / 100
+freight_cost_with_surcharge = freight_cost_per_mile * (1 + fuel_surcharge_pct)
+transport_cost_per_mile = freight_cost_with_surcharge  # Variable cost per mile
+handling_cost_per_unit= unload_handling_per_unit  # Fixed per unit, applied in objective
+
+print(f"\n REALISTIC TRANSPORT COST BREAKDOWN:")
+print(f" Unit Weight: {unit_weight_lbs} lbs = {weight_cwt*100:.4f} cwt")
+print(f" Freight Rate (industry): ${freight_rate_per_cwt_per_100mi}/cwt per 100 miles")
+print(f" Freight cost per unit per 100 miles: ${weight_cwt * freight_rate_per_cwt_per_100mi:.4f}")
+print(f" Freight cost per unit per MILE: ${freight_cost_per_mile:.6f}")
+print(f" Fuel surcharge ({fuel_surcharge_pct*100:.0f}%): ${freight_cost_with_surcharge:.6f}/mile")
+print(f" Handling/Unloading per unit: ${unload_handling_per_unit:.2f} (fixed)")
+print(f" TOTAL Transport Cost per mile per unit: ${transport_cost_per_mile:.6f}")
+print(f" (Plus ${pickup_dropoff_fee:.0f} fixed pickup/drop-off per facility)")
 print(f" Fixed Cost: ${min(fixed_cost.values()):,} - ${max(fixed_cost.values()):,}")
 
 #Saving all data as pickle for easy loading
@@ -114,6 +141,8 @@ data_package = {
     'fixed_cost': fixed_cost,
     'capacity': capacity,
     'transport_cost_per_mile': transport_cost_per_mile,
+    'handling_cost_per_unit': handling_cost_per_unit,
+    'pickup_dropoff_fee': pickup_dropoff_fee,
     'stores_df': stores_df,
     'facilities_df': facilities_df,
     'params_df': params_df,

@@ -1,0 +1,4 @@
+Scenario,NPV,Volume_Growth,Cost_Inflation,Price_Factor
+Base Case,7952277.7725184355,0.03,0.02,1.0
+Conservative,5554122.671600467,0.0,0.04,0.9
+Optimistic,10222797.565083975,0.05,0.01,1.1

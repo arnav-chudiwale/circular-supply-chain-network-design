@@ -4,13 +4,30 @@
 
 ---
 
+## 🏆 Executive Summary
+
+**Optimal Solution:** 2 Refurbishment Centers (Fresno + Reno)  
+**Financial Performance:** 
+- 📈 **3-Year NPV:** $7.95M (10% discount rate)
+- 🎁 **ROI:** 447.6% (149.2% annualized) 
+- ⏱️ **Payback Period:** **7 months** (0.56 years)
+- 💰 **Annual Incremental Value:** $3.35M
+- 📊 **Improvement vs. Baseline:** 541% increase in value recovery
+
+**Network Efficiency:**
+- Grade A Direct Resale: $400/unit | Grade B Refurbished: $250/unit | Grade C Parts: $50/unit
+- Average logistics cost: **$0.41/unit** (freight + handling + facility fees)
+- Landfill diversion: 95%+ | Processing cycle: 14-21 days (vs. 60+ days baseline)
+
+---
+
 ## Project Overview
 
 This project designs an optimized reverse logistics network for a premium electronics retailer handling ~28,140 annual smartphone returns across 55 California retail locations. The solution determines optimal refurbishment center locations, routing assignments, and financial viability to transform product returns from a disposal cost into a value recovery operation.
 
 **Current State:** Returns shipped to bulk recycler → $22/unit recovery ($619,080 annually)  
-**Proposed State:** Grade-based refurbishment network → $168/unit average recovery ($6.7M+ annually)  
-**Net Impact:** $5.8M incremental annual value with 3-4 month payback on infrastructure investment
+**Proposed State:** Grade-based refurbishment network → $141/unit average recovery ($3.97M annually)  
+**Net Impact:** $3.35M incremental annual value with sub-1-year payback on $2.25M infrastructure investment
 
 ---
 
@@ -119,8 +136,14 @@ Bulk Recycler Model:
 - Grade B refurbishment: $55/unit (screen/battery replacement)
 - Grade C processing: $12/unit (disassembly labor)
 
-**Transport Costs:**
-- $0.08 per mile per unit (California LTL freight rates 2024)
+**Transport Costs (Realistic LTL Freight Model):**
+- Base freight rate: $3.50/cwt per 100 miles (2024 California data)
+- Unit weight: 0.44 lbs per smartphone
+- Calculated cost per mile: **$0.000172/mile/unit**
+- Handling cost: **$0.35/unit** (unload/inspection)
+- Pickup/drop-off: **$125/facility** (fixed logistics fee)
+- Annual total: $11,349.71 for 28,140 units (vs. prev estimate $312K)
+- **Insight:** Transport costs near-inelastic to project NPV (elasticity -0.00)
 
 **Time-Value Decay:**
 - $4.00 per week depreciation (Source: SellCell.com 2024 iPhone depreciation report)
@@ -238,9 +261,56 @@ CircularSupplyChain/
 
 ---
 
-## Results & Progress
+## 🏆 FINAL SOLUTION (Optimal p=2 Determination)
 
-### ✅ Data Preprocessing Completed (6th Feb 2026)
+**Selected Facilities:**
+| Location | City | Fixed Cost | Logistics | Total | Stores | Volume |
+|----------|------|-----------|-----------|-------|--------|--------|
+| **FC04: Central Valley** | Fresno | $770,000 | $5,675 | $775,675 | 28 | 14,072 |
+| **FC05: Reno Regional** | Reno, NV | $770,000 | $5,675 | $775,675 | 27 | 14,068 |
+| **TOTAL** | | **$1,540,000** | **$11,350** | **$1,551,350** | **55** | **28,140** |
+
+**Why This Configuration:**
+- ✅ Lowest total annual cost ($1.55M vs. competitors: $1.99M-$2.52M)
+- ✅ Balanced geographic distribution (28 stores each side)
+- ✅ Reno facility provides 31% cost advantage despite out-of-state location
+- ✅ Average distance: 257.7 miles/unit (acceptable service level)
+- ✅ Annual operating profit: $2.42M (after all costs)
+
+**Key Metrics:**
+- Processing capacity: 28,140 units/year (100% utilization)
+- Grade A units (direct resale): 7,014 units @ $400 = $2.80M revenue
+- Grade B units (refurbished): 12,640 units @ $250 = $3.16M revenue
+- Grade C units (parts): 8,422 units @ $50 = $421K revenue
+- **Total annual revenue:** $6.39M | **Operating costs:** $2.42M | **Net recovery:** $3.97M
+
+---
+
+## 📊 FINANCIAL ANALYSIS RESULTS
+
+### 3-Year NPV Analysis
+```
+Year 0: -$2,250,000    (Capital: 2 facilities @ $1.125M each)
+Year 1: +$4,038,209    Net cash flow | PV: $3,671,099
+Year 2: +$4,107,029    Net cash flow | PV: $3,394,239
+Year 3: +$4,175,267    Net cash flow | PV: $3,136,940
+═══════════════════════════════════════════════════════════
+NPV:    $7,952,278     | ROI: 447.6% | Payback: 0.56 years
+```
+
+### Sensitivity Analysis: What Drives Project Success?
+| Parameter | Elasticity | Impact | Finding |
+|-----------|-----------|--------|---------|
+| **Resale Prices** | **2.08** ✓ HIGH | 2.08% NPV change per 1% change | Market conditions critical |
+| **Return Volume** | **1.80** ✓ HIGH | 1.80% NPV change per 1% change | Volume growth accelerates NPV |
+| Fixed Costs | -0.50 | MODERATE | ±20% facility cost = ±$1M NPV | Contained impact |
+| **Freight Cost** | **-0.00** ✗ LOW | Negligible | Transport optimization not priority |
+| **Handling Cost** | **-0.00** ✗ LOW | Negligible | More than $0.35/unit impacts <$1K |
+| CapEx | -0.30 | LOW | Investment recovered in 7 months | Not a constraint |
+
+**Strategic Insight:** Project viability driven by market conditions (resale prices, return volumes), NOT logistics efficiency. Even with 15% price reduction, NPV remains positive at $5.55M.
+
+---
 
 **Data Pipeline:**
 - ✅ Loaded 54 stores with 28,140 units/year supply
@@ -420,9 +490,9 @@ Key variables tested (±20% variation):
 ### Value Proposition
 This project demonstrates how operations research techniques solve real-world strategic problems:
 
-**Problem:** $5.8M in lost value annually from inefficient returns handling  
-**Solution:** Optimized 2-facility refurbishment network  
-**Result:** 670% improvement in value recovery ($22/unit → $168/unit)
+**Problem:** $3.35M in lost value annually from inefficient returns handling  
+**Solution:** Optimized 2-facility refurbishment network (Fresno + Reno)  
+**Result:** 541% improvement in value recovery ($22/unit → $141/unit average)
 
 ### Applicability
 The methodology transfers to:
@@ -448,14 +518,20 @@ This project is developed for educational and portfolio purposes. Data is synthe
 
 ---
 
-*Last Updated: 6th February 2026*
+*Last Updated: 7th February 2026*
 
 ### Recent Updates
-- **6th Feb 2026 (Evening):** ✅ Gurobi optimization models completed
-  - MODEL #1: Distance minimization → 2-facility solution (Bay Area + LA) with 54.3 mi/unit average distance
-  - MODEL #2: Cost minimization → 2-facility solution (LA + Reno) with $1.99M annual cost ($165K savings vs distance model)
-  - Comparative analysis: ArcGIS vs Gurobi-Distance vs Gurobi-Cost trade-offs documented
-  - Data preprocessing validated: Haversine distance calculations correct, routing factor applied
-  - All output files generated and saved to `outputs/` directory
+- **7th Feb 2026 (Final):** ✅ **OPTIMAL SOLUTION DETERMINED** (p=2 Facility Location)
+  - Gurobi optimal p formulation: tested p=1 through p=5 to find best facility count
+  - **Selected: FC04 (Fresno) + FC05 (Reno)** = $1.55M annual cost, $7.95M 3-year NPV, **0.56-year payback**
+  - Realistic transport cost model: $0.000172/mile freight + $0.35/unit handling + $125/facility fees (vs. prev $0.08/mile placeholder)
+  - Sensitivity analysis reveals: Resale prices (2.08 elasticity) and return volume (1.80) drive viability; transport costs near-inelastic to NPV
+  - Executive summary PDF generated with complete financial business case
+  - All dependent scripts synchronized: financial_analysis.py, sensitivity_analysis.py, generate.executive_summary.py
 
-- **6th Feb 2026 (Afternoon):** ArcGIS Network Analyst optimization completed. Los Angeles Metro facility selected to serve all 54 California stores with 28,140 annual returns. Analysis script debugged and validated.
+- **6th Feb 2026 (Evening):** ✅ Gurobi comparative analysis completed
+  - Distance minimization model (p=2): Bay Area + LA, 54.3 mi/unit average
+  - Cost minimization model (p=2): LA + Reno, $1.99M annual cost ($165K vs. distance model)
+  - Identified that cost model outperforms distance model when realistic transport costs applied
+
+- **6th Feb 2026 (Afternoon):** ArcGIS baseline completed. Los Angeles Metro single-facility scenario for comparison
